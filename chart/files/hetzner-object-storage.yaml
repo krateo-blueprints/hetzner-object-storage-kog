@@ -1,0 +1,221 @@
+openapi: 3.0.3
+info:
+  title: Hetzner Object Storage (S3) Bucket API
+  description: |
+    OpenAPI document describing S3 bucket CRUD operations against a Hetzner
+    Object Storage endpoint (https://{location}.your-objectstorage.com).
+
+    Authored for use with krateoplatformops/oasgen-provider. The Hetzner
+    Object Storage API is S3-compatible (AWS Signature V4 + XML); this
+    document models the same operations in a JSON/Basic shape so the
+    generic rest-dynamic-controller can drive them. Field names are
+    lower-camelCase JSON projections of the S3 XML schema. See the chart
+    README for caveats around signing and content negotiation.
+  version: 1.0.0
+
+servers:
+  - url: https://{location}.your-objectstorage.com
+    description: Hetzner Object Storage endpoint
+    variables:
+      location:
+        default: fsn1
+        description: Hetzner location code (fsn1, nbg1, hel1)
+        enum:
+          - fsn1
+          - nbg1
+          - hel1
+
+security:
+  - basicAuth: []
+
+paths:
+  /:
+    get:
+      operationId: listBuckets
+      summary: List all buckets owned by the authenticated principal
+      description: |
+        Maps to the S3 ListBuckets operation (GET on the service endpoint).
+        Used by oasgen-provider as the `findby` action to locate a bucket
+        by name on the first reconcile.
+      tags: [bucket]
+      responses:
+        "200":
+          description: A list of buckets owned by the caller.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListAllMyBucketsResult"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /{name}:
+    parameters:
+      - $ref: "#/components/parameters/BucketName"
+    put:
+      operationId: createBucket
+      summary: Create a new bucket
+      description: |
+        Maps to the S3 CreateBucket operation (PUT /{bucket}). Bucket names
+        must be DNS-compatible (3-63 chars, lowercase, digits, hyphens) and
+        globally unique within a Hetzner location.
+      tags: [bucket]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBucketConfiguration"
+      responses:
+        "200":
+          description: Bucket created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bucket"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+    get:
+      operationId: getBucket
+      summary: Get bucket metadata
+      description: |
+        Returns metadata for a single bucket. JSON projection of the S3
+        HEAD /{bucket} + GET /{bucket}?location pair. Used by
+        oasgen-provider as the `get` action on subsequent reconciles.
+      tags: [bucket]
+      responses:
+        "200":
+          description: Bucket metadata.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bucket"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+    delete:
+      operationId: deleteBucket
+      summary: Delete a bucket
+      description: |
+        Maps to the S3 DeleteBucket operation (DELETE /{bucket}). Hetzner
+        refuses the call when the bucket still contains objects (returns
+        409 BucketNotEmpty).
+      tags: [bucket]
+      responses:
+        "204":
+          description: Bucket deleted.
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: |
+        S3 access key in the username field, secret key in the password
+        field. Note: real S3 calls require AWS Signature V4, not HTTP
+        Basic; oasgen-provider's rest-dynamic-controller does not sign
+        requests. See chart README for the gap.
+
+  parameters:
+    BucketName:
+      name: name
+      in: path
+      required: true
+      description: Bucket name. DNS-compatible, 3-63 chars, lowercase.
+      schema:
+        type: string
+
+  responses:
+    NotFound:
+      description: The named bucket does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Conflict:
+      description: |
+        The bucket name is already taken (on create) or the bucket is
+        not empty (on delete).
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Forbidden:
+      description: Credentials are missing, invalid, or unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  schemas:
+    CreateBucketConfiguration:
+      type: object
+      description: |
+        JSON projection of the S3 CreateBucketConfiguration XML payload.
+        The locationConstraint field is informational on Hetzner because
+        the effective location is determined by the endpoint host.
+      properties:
+        locationConstraint:
+          type: string
+          description: Hetzner location code (fsn1, nbg1, hel1).
+          enum:
+            - fsn1
+            - nbg1
+            - hel1
+
+    Bucket:
+      type: object
+      description: A single S3 bucket.
+      properties:
+        name:
+          type: string
+          description: Bucket name.
+        creationDate:
+          type: string
+          description: ISO-8601 timestamp at which the bucket was created.
+        locationConstraint:
+          type: string
+          description: Hetzner location code (fsn1, nbg1, hel1).
+      required:
+        - name
+
+    Owner:
+      type: object
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+
+    ListAllMyBucketsResult:
+      type: object
+      description: |
+        JSON projection of the S3 ListAllMyBucketsResult XML envelope.
+      properties:
+        owner:
+          $ref: "#/components/schemas/Owner"
+        buckets:
+          type: array
+          items:
+            $ref: "#/components/schemas/Bucket"
+
+    Error:
+      type: object
+      description: JSON projection of the S3 Error XML envelope.
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        bucketName:
+          type: string
+        requestId:
+          type: string

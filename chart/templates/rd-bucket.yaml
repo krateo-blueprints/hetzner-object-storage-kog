@@ -1,0 +1,33 @@
+apiVersion: ogen.krateo.io/v1alpha1
+kind: RestDefinition
+metadata:
+  name: {{ include "hetzner-object-storage-kog.fullname" . }}-bucket
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "hetzner-object-storage-kog.labels" . | nindent 4 }}
+spec:
+  oasPath: configmap://{{ .Release.Namespace }}/{{ include "hetzner-object-storage-kog.fullname" . }}-bucket-oas/hetzner-object-storage.yaml
+  resourceGroup: objectstorage.hetzner.ogen.krateo.io
+  resource:
+    kind: Bucket
+    identifiers:
+      - name
+    additionalStatusFields:
+      - creationDate
+      - locationConstraint
+    excludedSpecFields:
+      - creationDate
+    verbsDescription:
+      - action: findby
+        method: GET
+        path: /
+        identifiersMatchPolicy: OR
+      - action: get
+        method: GET
+        path: /{name}
+      - action: create
+        method: PUT
+        path: /{name}
+      - action: delete
+        method: DELETE
+        path: /{name}

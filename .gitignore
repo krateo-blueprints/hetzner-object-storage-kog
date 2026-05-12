@@ -1,0 +1,13 @@
+# Helm packaging output
+dist/
+*.tgz
+
+# Helm chart dependencies
+chart/charts/
+chart/Chart.lock
+
+# Editor and OS junk
+.DS_Store
+.idea/
+.vscode/
+*.swp

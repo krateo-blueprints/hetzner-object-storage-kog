@@ -1,0 +1,20 @@
+apiVersion: v2
+name: hetzner-object-storage-kog
+description: |
+  Krateo OASGen operator chart for Hetzner Object Storage buckets.
+  Installs a RestDefinition (consumed by krateoplatformops/oasgen-provider)
+  that generates the Bucket and BucketConfiguration CRDs and wires up the
+  generic rest-dynamic-controller against a Hetzner S3 endpoint.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - krateo
+  - oasgen
+  - hetzner
+  - object-storage
+  - s3
+home: https://github.com/krateoplatformops/oasgen-provider
+sources:
+  - https://github.com/krateoplatformops/oasgen-provider
+maintainers: []

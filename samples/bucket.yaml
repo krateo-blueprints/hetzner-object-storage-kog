@@ -1,0 +1,11 @@
+apiVersion: objectstorage.hetzner.ogen.krateo.io/v1alpha1
+kind: Bucket
+metadata:
+  name: my-krateo-bucket
+  namespace: default
+spec:
+  configurationRef:
+    name: default-fsn1
+    namespace: default
+  name: krateo-demo-bucket-001
+  locationConstraint: fsn1

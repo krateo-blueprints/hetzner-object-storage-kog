@@ -1,0 +1,16 @@
+apiVersion: objectstorage.hetzner.ogen.krateo.io/v1alpha1
+kind: BucketConfiguration
+metadata:
+  name: default-fsn1
+  namespace: default
+spec:
+  authentication:
+    basic:
+      usernameRef:
+        name: hetzner-s3-credentials
+        namespace: default
+        key: username
+      passwordRef:
+        name: hetzner-s3-credentials
+        namespace: default
+        key: password
