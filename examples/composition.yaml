@@ -1,0 +1,18 @@
+# Installing this Composition registers the Hetzner Object Storage KOG
+# RestDefinition, which makes the oasgen-provider generate the Bucket and
+# BucketConfiguration CRDs against a Hetzner S3 endpoint.
+#
+# Per-resource CRs (the S3 credentials Secret, the BucketConfiguration that
+# references it, and the Bucket itself) are applied separately. Ready-to-edit
+# samples live in this repo's samples/ directory:
+#   kubectl apply -f samples/secret-credentials.yaml
+#   kubectl apply -f samples/bucketconfiguration.yaml
+#   kubectl apply -f samples/bucket.yaml
+apiVersion: composition.krateo.io/v0-1-0
+kind: HetznerObjectStorageKog
+metadata:
+  name: hetzner-object-storage-kog
+  namespace: krateo-system
+spec:
+  bucket:
+    oasConfigMapKey: hetzner-object-storage.yaml

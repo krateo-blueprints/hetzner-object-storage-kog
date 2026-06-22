@@ -11,10 +11,18 @@ appVersion: "0.1.0"
 keywords:
   - krateo
   - oasgen
-  - hetzner
+  - storage
   - object-storage
   - s3
+  - hetzner
+  - kog
 home: https://github.com/krateoplatformops/oasgen-provider
+icon: https://raw.githubusercontent.com/krateoplatformops/krateo/main/docs/media/logo.svg
 sources:
   - https://github.com/krateoplatformops/oasgen-provider
 maintainers: []
+annotations:
+  krateo.io/category: storage
+  krateo.io/display-name: Hetzner Object Storage KOG
+  krateo.io/maturity: beta
+  krateoSupportedVersion: ">= 2.5.1"

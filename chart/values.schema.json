@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "Hetzner Object Storage KOG",
+  "description": "Configuration for the Hetzner Object Storage KOG blueprint. Installs a RestDefinition (consumed by krateoplatformops/oasgen-provider) that generates the Bucket and BucketConfiguration CRDs and wires the generic rest-dynamic-controller against a Hetzner S3 endpoint. Per-resource CRs (Bucket, BucketConfiguration, the S3 credentials Secret) are applied separately; samples live in the repo's samples/ directory.",
+  "properties": {
+    "nameOverride": {
+      "type": "string",
+      "title": "Name override",
+      "description": "Override the chart name used in resource names. Leave empty to use the chart name.",
+      "default": ""
+    },
+    "fullnameOverride": {
+      "type": "string",
+      "title": "Full name override",
+      "description": "Override the fully qualified release name used in resource names. Leave empty to derive it from the release and chart name.",
+      "default": ""
+    },
+    "bucket": {
+      "type": "object",
+      "title": "Bucket RestDefinition",
+      "description": "Settings for the Bucket RestDefinition and its OpenAPI ConfigMap.",
+      "properties": {
+        "oasConfigMapKey": {
+          "type": "string",
+          "title": "OAS ConfigMap key",
+          "description": "Key inside the generated ConfigMap that holds the Hetzner Object Storage OpenAPI document referenced by the RestDefinition.",
+          "default": "hetzner-object-storage.yaml"
+        }
+      }
+    }
+  }
+}
