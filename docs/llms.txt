@@ -1,0 +1,26 @@
+# hetzner-object-storage-kog — LLM doc index (pinned: 0.1.0)
+# One line per file; regenerate the pin on release. Read files at the tag that matches
+# the running build: the chart version is CompositionDefinition.spec.chart.version and
+# equals appVersion and the published OCI tag.
+docs/index.md: the map — what the KOG is (RestDefinition → oasgen-provider → Bucket/BucketConfiguration CRDs) + links to the whole bundle and the repo layout
+docs/overview.md: architecture — the OAS ConfigMap + RestDefinition the chart installs, the generated CRDs, the RestDefinition-to-S3 verb mapping, the auth model, and the SigV4/XML known limitations
+docs/usage.md: install oasgen-provider, install the KOG, provision a bucket (Secret → BucketConfiguration → Bucket), and the data-plane caveat
+docs/configuration.md: the whole surface — chart values (nameOverride/fullnameOverride/bucket.oasConfigMapKey) and the Bucket/BucketConfiguration/Secret CR fields
+docs/api.md: the RestDefinition the chart emits, the Bucket/BucketConfiguration CRDs oasgen-provider generates, the underlying OpenAPI operations, and the CompositionDefinition registration
+docs/examples.md: index of the runnable examples
+docs/release.md: how a release ships — tag v<chart-version> → release-chart lints, packages, pushes the chart to GHCR; bump the CompositionDefinition after
+docs/log.md: curated history
+examples/provision-bucket/README.md: the end-to-end provisioning walk-through (oasgen-provider + KOG install, then Secret/BucketConfiguration/Bucket) using the repo's samples/
+examples/composition.yaml: the HetznerObjectStorageKog composition CR that installs the KOG through Krateo
+# Source (read at the same tag; the docs above are derived from these):
+chart/Chart.yaml: chart name/description/version and krateo.io/* annotations
+chart/values.yaml: the chart values (nameOverride, fullnameOverride, bucket.oasConfigMapKey)
+chart/values.schema.json: the typed values schema
+chart/templates/configmap-bucket-oas.yaml: the ConfigMap exposing the OAS to oasgen-provider
+chart/templates/rd-bucket.yaml: the RestDefinition — resource, identifiers, status fields, and the four CRUD verbs
+chart/files/hetzner-object-storage.yaml: the embedded OpenAPI 3.0 document (the canonical copy is openapi/hetzner-object-storage.yaml)
+openapi/hetzner-object-storage.yaml: the canonical OAS source — S3 bucket operations, schemas, and the basicAuth security scheme
+compositiondefinition.yaml: this component's own Krateo registration (spec.chart.version = the published chart)
+samples/secret-credentials.yaml: the S3 access key + secret key Secret
+samples/bucketconfiguration.yaml: the per-configuration CR binding credentials
+samples/bucket.yaml: the user-facing Bucket CR
