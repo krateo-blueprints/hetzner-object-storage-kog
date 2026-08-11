@@ -97,7 +97,7 @@ Index: [docs/examples.md](./docs/examples.md).
 ## Develop & release
 
 Tag `v<chart-version>` matching `chart/Chart.yaml`'s `version:` and push it — the
-`release-chart` workflow (`.github/workflows/release.yml`) lints, packages, and pushes
+`release-chart` workflow (`.github/workflows/release-tag.yaml`) lints, packages, and pushes
 the chart to `oci://ghcr.io/krateo-blueprints/charts/hetzner-object-storage-kog`.
 
 ```sh
