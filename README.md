@@ -54,7 +54,7 @@ From the published OCI artifact (recommended):
 
 ```sh
 helm install hetzner-object-storage-kog \
-  oci://ghcr.io/braghettos/charts/hetzner-object-storage-kog \
+  oci://ghcr.io/krateo-blueprints/charts/hetzner-object-storage-kog \
   --version 0.1.0 \
   --namespace krateo-system --create-namespace
 ```
@@ -69,7 +69,7 @@ helm install hetzner-object-storage-kog ./chart --namespace krateo-system
 
 Tag a `v<chart-version>` matching `chart/Chart.yaml`'s `version:` field and
 push the tag — the `release-chart` workflow lints, packages, and pushes the
-chart to `oci://ghcr.io/braghettos/charts/hetzner-object-storage-kog`.
+chart to `oci://ghcr.io/krateo-blueprints/charts/hetzner-object-storage-kog`.
 
 ```sh
 git tag v0.1.0
