@@ -17,7 +17,7 @@ keywords:
   - hetzner
   - kog
 home: https://github.com/krateoplatformops/oasgen-provider
-icon: https://raw.githubusercontent.com/krateoplatformops/krateo/main/docs/media/logo.svg
+icon: https://raw.githubusercontent.com/krateo-platformops/krateo/main/docs/media/logo.svg
 sources:
   - https://github.com/krateoplatformops/oasgen-provider
 maintainers: []

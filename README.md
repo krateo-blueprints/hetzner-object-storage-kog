@@ -96,16 +96,19 @@ Index: [docs/examples.md](./docs/examples.md).
 
 ## Develop & release
 
-Tag `v<chart-version>` matching `chart/Chart.yaml`'s `version:` and push it — the
-`release-chart` workflow (`.github/workflows/release-tag.yaml`) lints, packages, and pushes
-the chart to `oci://ghcr.io/krateo-blueprints/charts/hetzner-object-storage-kog`.
+Tag a bare semver (`0.1.3`, no `v`) and push it. `.github/workflows/release-tag.yaml` stamps
+the `CHART_VERSION` placeholder in `chart/Chart.yaml` and `compositiondefinition.yaml` from the
+tag, pushes the chart to `oci://ghcr.io/krateo-blueprints/charts/hetzner-object-storage-kog`,
+and publishes the same archive to the Marketplace's `blueprints` index
+(`https://krateo-blueprints.github.io/charts/blueprints`), per the organisation's
+publishing standard (krateo-blueprints/charts `PUBLISHING.md`).
 
 ```sh
-git tag v0.1.0
-git push origin v0.1.0
+git tag 0.1.3
+git push origin 0.1.3
 ```
 
-After publishing, bump `compositiondefinition.yaml`'s `spec.chart.version` on `main`.
+Nothing is bumped by hand after publishing: the version lives only in the tag.
 CI runs `helm lint` + a render smoke test, the shared security workflow, and the
 shared docs-standard linter (`.github/workflows/lint.yaml`). Full runbook:
 [docs/release.md](./docs/release.md).
