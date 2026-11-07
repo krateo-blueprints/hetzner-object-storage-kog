@@ -16,10 +16,11 @@ keywords:
   - s3
   - hetzner
   - kog
-home: https://github.com/krateoplatformops/oasgen-provider
+home: https://github.com/krateo-platformops/oasgen-provider
 icon: https://raw.githubusercontent.com/krateo-platformops/krateo/main/docs/media/logo.svg
 sources:
-  - https://github.com/krateoplatformops/oasgen-provider
+  - https://github.com/krateo-blueprints/hetzner-object-storage-kog
+  - https://github.com/krateo-platformops/oasgen-provider
 maintainers: []
 annotations:
   krateo.io/category: storage

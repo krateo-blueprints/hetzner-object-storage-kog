@@ -31,7 +31,7 @@ same bytes, as the organisation's publishing standard requires
    `keywords`.
 3. **Pushes** it to `oci://ghcr.io/krateo-blueprints/charts/hetzner-object-storage-kog:<tag>`.
 4. **Publishes** the same archive to the Marketplace's `blueprints` index through the
-   organisation's publisher (`krateo-blueprints/charts/.github/workflows/publish-chart.yaml@1`),
+   organisation's publisher (`krateo-blueprints/charts/.github/workflows/publish-chart.yaml`, pinned per its rule 9),
    which succeeds only once the served index lists the version and `helm pull --repo`
    installs it anonymously. The portal Marketplace installs from that index, not from GHCR.
 5. **Attaches** the stamped `compositiondefinition.yaml` to the GitHub release for this tag.
