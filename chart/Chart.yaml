@@ -9,7 +9,6 @@ type: application
 version: CHART_VERSION
 appVersion: "0.1.0"
 keywords:
-  - krateo
   - oasgen
   - storage
   - object-storage
